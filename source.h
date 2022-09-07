@@ -6,43 +6,46 @@
 #include <string>
 
 namespace frontend {
-
 using namespace std;
 
 class Source
 {
 private:
     ifstream source;
-    string sourceFileName;
-    int  lineNum;      // current source line number
-    char currentCh;    // current source character
+    int  line;      
+    string fileName;
+    char currCh;
 
 public:
-    static const char EOL = '\n';
+    static const char endOfLine = '\n';
+    Source(string sourceName) : lineNum(1)
+    {
+        source.open(sourceName);
 
-    /**
-     * Constructor
-     * @param sourceFileName the source file name.
-     */
+        if (source.fail())
+        {
+            cout << "The program was unable to open the source file." << sourceName << endl;
+            exit(-1);
+        }
+        currCh = nextCh(); 
+    }
     
-
-    /**
-     * Getter.
-     * @return the current source line number.
-     */
-
-    /**
-     * Getter.
-     * @return the current source character.
-     */
-
-    /**
-     * Read and return the next input source character.
-     * @return the character, or EOF if at the end of the file.
-     */
-
+    int numLine() const { return lineNum; }
+    char currCh() const { return currCh; } 
+  
+    char nextCh()
+    {
+        currCh = source.get();
+        if (source.eof()) currCh = EOF;
+        else if (currCh == endOfLine) lineNum++;
+        else if (source.fail())
+        {
+            cout << "Failed to read the source file." << sourceName << endl;
+            exit(-1);
+        }
+        return currCh;
+    }
 };
 
-}  // namespace frontend
-
+}  
 #endif /* SOURCE_H_ */
