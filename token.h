@@ -30,18 +30,27 @@ private:
     /**
      * Initialize the table.
      */
-
+    static map<string, TokenType> reservedWords;
 public:
     /**
      * Initialize the static map.
      */
-    
+    static void initialize();
+
+    TokenType type;  // what type of token
+    int lineNumber;  // source line number of the token
+    string text;     // text of the token
+    Object value;    // the value (if any) of the token
 
     /**
      * Constructor.
      * @param firstChar the first character of the token.
      */
-
+     Token(char firstChar) : type(ERROR), lineNumber(0), text("")
+    {
+        text += firstChar;
+    }
+    
 
     /**
      * Construct a word token.
