@@ -3,40 +3,45 @@
 
 #include <string>
 #include <map>
+#include "Source.h"
 
-//file imports
 namespace frontend {
 
 using namespace std;
 
 enum class TokenType
 {
+    PROGRAM, BEGIN, END, REPEAT, UNTIL, WRITE, 
 
 };
 
 static const string TOKEN_TYPE_STRINGS[] =
 {
+    "PROGRAM", "BEGIN", "END", "REPEAT", "UNTIL", "WRITE", 
 
 };
 
 constexpr TokenType PROGRAM        = TokenType::PROGRAM;
 constexpr TokenType BEGIN          = TokenType::BEGIN;
 constexpr TokenType END            = TokenType::END;
-//include rest
+constexpr TokenType REPEAT         = TokenType::REPEAT;
+constexpr TokenType UNTIL          = TokenType::UNTIL;
+constexpr TokenType WRITE          = TokenType::WRITE;
 
+ 
 class Token
 {
 private:
     /**
-     * Initialize the table.
+     * Initialize the table
      */
-    static map<string, TokenType> reservedWords;
+
 public:
     /**
      * Initialize the static map.
      */
     static void initialize();
-
+    
     TokenType type;  // what type of token
     int lineNumber;  // source line number of the token
     string text;     // text of the token
@@ -46,11 +51,10 @@ public:
      * Constructor.
      * @param firstChar the first character of the token.
      */
-     Token(char firstChar) : type(ERROR), lineNumber(0), text("")
+    Token(char firstChar) : type(ERROR), lineNumber(0), text("")
     {
         text += firstChar;
     }
-    
 
     /**
      * Construct a word token.
@@ -58,6 +62,8 @@ public:
      * @param source the input source.
      * @return the word token.
      */
+    static Token *Word(char firstChar, Source *source);
+    
 
     /**
      * Construct a number token and set its value.
