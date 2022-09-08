@@ -28,9 +28,9 @@ constexpr TokenType END            = TokenType::END;
 constexpr TokenType REPEAT         = TokenType::REPEAT;
 constexpr TokenType UNTIL          = TokenType::UNTIL;
 constexpr TokenType WRITE          = TokenType::WRITE;
-constexpr TokenType WRITE          = TokenType::WRITELN;
-constexpr TokenType WRITE          = TokenType::PERIOD;
-constexpr TokenType WRITE          = TokenType::COLON;
+constexpr TokenType WRITELN          = TokenType::WRITELN;
+constexpr TokenType PERIOD          = TokenType::PERIOD;
+constexpr TokenType COLON          = TokenType::COLON;
 
  
 class Token
