@@ -11,7 +11,8 @@ using namespace std;
 
 enum class TokenType
 {
-    PROGRAM, BEGIN, END, REPEAT, UNTIL, WRITE, 
+    PROGRAM, BEGIN, END, REPEAT, UNTIL, WRITE, WRITELN,
+    PERIOD, COLON,
 
 };
 
@@ -27,14 +28,16 @@ constexpr TokenType END            = TokenType::END;
 constexpr TokenType REPEAT         = TokenType::REPEAT;
 constexpr TokenType UNTIL          = TokenType::UNTIL;
 constexpr TokenType WRITE          = TokenType::WRITE;
+constexpr TokenType WRITE          = TokenType::WRITELN;
+constexpr TokenType WRITE          = TokenType::PERIOD;
+constexpr TokenType WRITE          = TokenType::COLON;
 
  
 class Token
 {
 private:
-    /**
-     * Initialize the table
-     */
+    //Initialize the table
+    static map<string, TokenType> reservedWords;
 
 public:
     /**
