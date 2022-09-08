@@ -1,10 +1,10 @@
 #ifndef SCANNER_H_
 #define SCANNER_H_
 
-//#include "source.h"     //REMOVE Comments once files are completed
-//#include "token.h"      //REMOVE Comments once files are completed
+#include "source.h"     //REMOVE Comments once files are completed
+#include "token.h"      //REMOVE Comments once files are completed
 
-namespace frontend {
+//namespace std; //frontend {            //mentioned in lecture(?)
 
 using namespace std;
 
@@ -14,18 +14,13 @@ private:
     Source *source;
 
 public:
-    /**
-     * Constructor.
-     * @param source the input source.
-     */
+    //input source
     Scanner(Source *source) : source(source){}
-    /**
-     * Extract the next token from the source.
-     * @return the token.
-     */
+    
+    //extracting next token from source
     Token *nextToken()
     {
-        //Skip blanks, comments, and other whitespace characters
+        //Skip blanks, comments, whitespaces
         char ch = nextNonblankCharacter();
 
         if (isalpha(ch))      return Token::Word(ch, source);
@@ -36,11 +31,8 @@ public:
     
 
 private:
-    /**
-     * Skip blanks, comments, and other whitespace characters
-     * and return the next nonblank character.
-     * @return the next nonblank character.
-     */
+    //Skip blanks, comments, whitespaces, return the next nonblank char
+
     char nextNonblankCharacter()
     {
         char ch = source->currentChar();
@@ -49,17 +41,17 @@ private:
         {
             if (ch == '{')
             {
-                // Consume characters of the comment.
+                // Consume comment chars
                 while ((ch != '}') && (ch != EOF)) ch = source->nextChar();
             }
-
-            ch = source->nextChar();  // consume character
+            //// consume character
+            ch = source->nextChar();  
         }
-
-        return ch;  // nonblank character
+        // nonblank character
+        return ch;  
     }
 };
 
-}  // namespace frontend
+//}  
 
 #endif /* SCANNER_H_ */

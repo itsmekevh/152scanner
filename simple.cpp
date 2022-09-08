@@ -1,6 +1,6 @@
 #include <string>
-//#include <scanner.h>        //REMOVE Comments once files are completed
-//#include <token.h>            //REMOVE Comments once files are completed
+#include <scanner.h>        //REMOVE Comments once files are completed
+#include <token.h>            //REMOVE Comments once files are completed
 //
 using namespace std;
 
@@ -10,16 +10,16 @@ void testScanner(Source *source);
 
 int main (int argc, char *argv[]){
     if(argc != 3){
-        cout << "Use: simple-{scan} sourceFileName" << endl;
+        cout << "Use: simple-{scan} fileName" << endl;
         exit (-1);
     }
 
     Token::initialize();
 
     string operation = argv[1];
-    string sourceFileName = argv[2];
+    string fileName = argv[2];
 
-    Source *source = new Source(sourceFileName);
+    Source *source = new Source(fileName);
 
     if(operation == "-scan"){
         testScanner(source);

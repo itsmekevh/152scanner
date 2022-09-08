@@ -4,8 +4,6 @@
 
 #include "token.h"
 
-namespace frontend {
-
 using namespace std;
 
 map<string, TokenType> Token::reservedWords;
@@ -191,18 +189,16 @@ Token *Token::SpecialSymbol(char firstChar, Source *source)
         {
             char nextChar = source->nextChar();
 
-            // Is it the := symbol?
+            // check for := symbol
             if (nextChar == '=')
             {
                 token->text += nextChar;
                 token->type = TokenType::COLON_EQUALS;
             }
-
-            // No, it's just the : symbol.
             else
             {
                 token->type = TokenType::COLON;
-                return token;  // already consumed :
+                return token;  
             }
 
             break;
@@ -210,27 +206,23 @@ Token *Token::SpecialSymbol(char firstChar, Source *source)
 
         case '<' :
         {
-            char nextChar = source->nextChar();  // consume <
+            char nextChar = source->nextChar();  
 
-            // Is it the <= symbol?
+            // check for <= symbol
             if (nextChar == '=')
             {
                 token->text += '=';
                 token->type = TokenType::LESS_EQUALS;
             }
-
-            // Is it the <> symbol?
             else if (nextChar == '>')
             {
                 token->text += '>';
                 token->type = TokenType::NOT_EQUALS;
             }
-
-            // No, it's just the < symbol.
             else
             {
                 token->type = TokenType::LESS_THAN;
-                return token;  // already consumed <
+                return token;  
             }
 
             break;
@@ -238,20 +230,18 @@ Token *Token::SpecialSymbol(char firstChar, Source *source)
 
         case '>' :
         {
-            char nextChar = source->nextChar();  // consume >
+            char nextChar = source->nextChar();  
 
-            // Is it the >= symbol?
+            //check for >= symbol
             if (nextChar == '=')
             {
                 token->text += '=';
                 token->type = TokenType::GREATER_EQUALS;
             }
-
-            // No, it's just the > symbol.
             else
             {
                 token->type = TokenType::GREATER_THAN;
-                return token;  // already consumed >
+                return token;  
             }
 
             break;
@@ -259,22 +249,19 @@ Token *Token::SpecialSymbol(char firstChar, Source *source)
 
         case '.' :
         {
-            char nextChar = source->nextChar();  // consume .
+            char nextChar = source->nextChar();  
 
-            // Is it the .. symbol?
+            // check for .. symbol
             if (nextChar == '.')
             {
                 token->text += '.';
                 token->type = TokenType::DOT_DOT;
             }
-
-            // No, it's just the . symbol.
             else
             {
                 token->type = TokenType::PERIOD;
-                return token;  // already consumed .
+                return token; 
             }
-
             break;
         }
 
@@ -287,7 +274,7 @@ Token *Token::SpecialSymbol(char firstChar, Source *source)
         }
     }
 
-    source->nextChar();  // consume the special symbol
+    source->nextChar();  
     return token;
 }
 
@@ -296,5 +283,3 @@ void Token::tokenError(Token *token, string message)
     printf("TOKEN ERROR at line %d: %s at '%s'\n",
            token->lineNumber, message.c_str(), token->text.c_str());
 }
-
-}  // namespace frontend

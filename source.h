@@ -5,7 +5,6 @@
 #include <fstream>
 #include <string>
 
-namespace frontend {
 using namespace std;
 
 class Source
@@ -18,7 +17,7 @@ private:
 
 public:
     static const char endOfLine = '\n';
-    Source(string sourceName) : lineNum(1)
+    Source(string sourceName) : line(1)
     {
         source.open(sourceName);
 
@@ -30,22 +29,21 @@ public:
         currCh = nextCh(); 
     }
     
-    int numLine() const { return lineNum; }
+    int numLine() const { return line; }
     char currCh() const { return currCh; } 
   
     char nextCh()
     {
         currCh = source.get();
         if (source.eof()) currCh = EOF;
-        else if (currCh == endOfLine) lineNum++;
+        else if (currCh == endOfLine) line++;
         else if (source.fail())
         {
-            cout << "Failed to read the source file." << sourceName << endl;
+            cout << "Failed to read the source file." << fileName << endl;
             exit(-1);
         }
         return currCh;
     }
 };
-
-}  
+ 
 #endif /* SOURCE_H_ */

@@ -3,9 +3,7 @@
 
 #include <string>
 #include <map>
-
-//file imports
-namespace frontend {
+#include "source.h"  
 
 using namespace std;
 
@@ -104,43 +102,31 @@ constexpr TokenType LBRACE         = TokenType::LBRACE;
 constexpr TokenType RBRACE         = TokenType::RBRACE;
 constexpr TokenType LCOMMENT       = TokenType::LCOMMENT;
 constexpr TokenType RCOMMENT       = TokenType::RCOMMENT;
+constexpr TokenType END_OF_FILE    = TokenType::END_OF_FILE;
+constexpr TokenType ERROR          = TokenType::ERROR; 
 
 class Token
 {
 private:
-    /**
-     * Initialize the table.
-     */
+    //table initialization
     static map<string, TokenType> reservedWords;
 
 public:
-    /**
-     * Initialize the static map.
-     */
+    //staticmap
     static void initialize();
 
-    TokenType type; // what type of token
-    int lineNumber; // source line number of the token
-    string text;    // text of the token
-    Object value;   // the value (if any) of the token
+    TokenType type; 
+    string text;   
+    int lineNumber;  
+    Object value;   
 
-    /**
-     * Constructor.
-     * @param firstChar the first character of the token.
-     */
-
+    //token first char
     Token(char firstChar) : type(ERROR), lineNumber(0), text("")
     {
         text += firstChar;
     }
 
-    /**
-     * Construct a word token.
-     * @param firstChar the first character of the token.
-     * @param source the input source.
-     * @return the word token.
-     */
-
+    //word token constructor
     Token *Word(char firstChar, Source *source)
     {
         Token *token = new Token(firstChar);
@@ -149,19 +135,13 @@ public:
         Token wordvalue[] = token.numvalue();
         for(int i = firstIndex; i <= lastIndex; i++)
         {
-            token.add(wordvalue[i].text().toupper())
+            token.add(wordvalue[i].text().toupper());
         }
 
         return token;
     }
 
-    /**
-     * Construct a number token and set its value.
-     * @param firstChar the first character of the token.
-     * @param source the input source.
-     * @return the number token.
-     */
-
+    //num. token constructor and value
     Token *Number(char firstChar, Source *source)
     {
         Token *token = new Token(firstChar);
@@ -176,13 +156,7 @@ public:
         return token;
     }
 
-    /**
-     * Construct a string token and set its value.
-     * @param firstChar the first character of the token.
-     * @param source the input source.
-     * @return the string token.
-     */
-
+    // string token constructor and value
     Token *CharacterOrString(char firstChar, Source *source)
     {
         Token *token = new Token(firstChar);
@@ -197,13 +171,7 @@ public:
         return token;
     }
 
-    /**
-     * Construct a special symbol token and set its value.
-     * @param firstChar the first character of the token.
-     * @param source the input source.
-     * @return the special symbol token.
-     */
-
+    //spcl symbol token and val
     Token *SpecialSymbol(char firstChar, Source *source)
     {
         Token *token = new Token(firstChar);
@@ -214,12 +182,7 @@ public:
         {
             token.add(specialvalue[i].text().toupper())
         }
-
         return token;
     }
-
 };
-
-}  // namespace frontend
-
 #endif /* TOKEN_H_ */
