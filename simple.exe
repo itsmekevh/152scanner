@@ -1,0 +1,763 @@
+# 1 "C:\\Users\\shiva\\Desktop\\152scanner\\152scanner\\simple.cpp"
+
+
+
+
+# 1 "C:\\Users\\shiva\\Desktop\\152scanner\\152scanner\\source.h" 1
+
+
+
+
+
+
+
+using namespace std;
+
+class Source
+{
+private:
+    ifstream source;
+    int  line;      
+    string fileName;
+    char currCh;
+
+public:
+    static const char endOfLine = '\n';
+    Source(string sourceName) : line(1)
+    {
+        source.open(sourceName);
+
+        if (source.fail())
+        {
+            cout << "The program was unable to open the source file." << sourceName << endl;
+            exit(-1);
+        }
+        currCh = nextCh(); 
+    }
+    
+    int numLine() const { return line; }
+    char currCh() const { return currCh; } 
+  
+    char nextCh()
+    {
+        currCh = source.get();
+        if (source.eof()) currCh = EOF;
+        else if (currCh == endOfLine) line++;
+        else if (source.fail())
+        {
+            cout << "Failed to read the source file." << fileName << endl;
+            exit(-1);
+        }
+        return currCh;
+    }
+};
+ 
+
+# 5 "C:\\Users\\shiva\\Desktop\\152scanner\\152scanner\\simple.cpp" 2
+
+# 1 "C:\\Users\\shiva\\Desktop\\152scanner\\152scanner\\scanner.h" 1
+
+
+
+
+# 1 "C:\\Users\\shiva\\Desktop\\152scanner\\152scanner\\token.h" 1
+
+
+
+
+
+
+
+using namespace std;
+
+enum class TokenType
+{
+     
+    PROGRAM, BEGIN, END, REPEAT, UNTIL, WRITE, WRITELN,
+    DIV, MOD, AND, OR, NOT, CONST, TYPE, VAR, PROCEDURE,
+    FUNCTION, WHILE, DO, FOR, TO, DOWNTO, IF, THEN, ELSE,
+    WHILE, CASE, OF,
+
+     
+    INTEGER, REAL, INDENTIFIER, STRING, CHARACTER
+
+    PLUSOP, MINUSOP, MULTOP, DIVOP, ASSIGN,
+    EQUALS, NE, LTEQ, GTEQ, LT, GT, 
+    PLUSEQUAL, MINUSEQUAL, MULTEQUAL, DIVEQUAL,
+    CARAT, SEMICOLOR, COMMA, LPAREN, RPAREN,
+    LBRACKET, RBRACKET, LBRACE, RBRACE, 
+    LCOMMENT, RCOMMENT;
+};
+
+static const string TOKEN_TYPE_STRINGS[] =
+{
+    "PROGRAM", "BEGIN", "END", "REPEAT", "UNTIL", "WRITE", "WRITELN",
+    "DIV", "MOD", "AND", "OR", "NOT", "CONST", "TYPE", "VAR", "PROCEDURE",
+    "FUNCTION", "WHILE", "DO", "FOR", "TO", "DOWNTO", "IF", "THEN", "ELSE",
+    "WHILE", "CASE", "OF",
+    
+    "INTEGER", "REAL", "INDENTIFIER", "STRING", "CHARACTER"
+
+    "PLUSOP", "MINUSOP", "MULTOP", "DIVOP", "ASSIGN",
+    "EQUALS", "NE", "LTEQ", "GTEQ", "LT", "GT", 
+    "PLUSEQUAL", "MINUSEQUAL", "MULTEQUAL", "DIVEQUAL",
+    "CARAT", "SEMICOLOR", "COMMA", "LPAREN", "RPAREN",
+    "LBRACKET", "RBRACKET", "LBRACE", "RBRACE", 
+    "LCOMMENT", "RCOMMENT";
+};
+
+constexpr TokenType PROGRAM        = TokenType::PROGRAM;
+constexpr TokenType BEGIN          = TokenType::BEGIN;
+constexpr TokenType END            = TokenType::END;
+constexpr TokenType REPEAT         = TokenType::REPEAT;
+constexpr TokenType UNTIL          = TokenType::UNTIL;
+constexpr TokenType WRITE          = TokenType::WRITE;
+constexpr TokenType WRITELN        = TokenType::WRITELN;
+constexpr TokenType DIV            = TokenType::DIV;
+constexpr TokenType MOD            = TokenType::MOD;
+constexpr TokenType AND            = TokenType::AND;
+constexpr TokenType OR             = TokenType::OR;
+constexpr TokenType NOT            = TokenType::NOT;
+constexpr TokenType CONST          = TokenType::CONST;
+constexpr TokenType TYPE           = TokenType::TYPE;
+constexpr TokenType VAR            = TokenType::VAR;
+constexpr TokenType PROCEDURE      = TokenType::PROCEDURE;
+constexpr TokenType FUNCTION       = TokenType::FUNCTION;
+constexpr TokenType WHILE          = TokenType::WHILE;
+constexpr TokenType DO             = TokenType::DO;
+constexpr TokenType FOR            = TokenType::FOR;
+constexpr TokenType TO             = TokenType::TO;
+constexpr TokenType DOWNTO         = TokenType::DOWNTO;
+constexpr TokenType IF             = TokenType::IF;
+constexpr TokenType THEN           = TokenType::THEN;
+constexpr TokenType ELSE           = TokenType::ELSE;
+constexpr TokenType WHILE          = TokenType::WHILE;
+constexpr TokenType CASE           = TokenType::CASE;
+constexpr TokenType OF             = TokenType::OF;
+constexpr TokenType INTEGER        = TokenType::INTEGER;
+constexpr TokenType REAL           = TokenType::REAL;
+constexpr TokenType IDENTIFIER     = TokenType::IDENTIFIER;
+constexpr TokenType STRING         = TokenType::STRING;
+constexpr TokenType CHARACTER      = TokenType::CHARACTER;
+constexpr TokenType PLUSOP         = TokenType::PLUSOP;
+constexpr TokenType MINUSOP        = TokenType::MINUSOP;
+constexpr TokenType MULTOP         = TokenType::MULTOP;
+constexpr TokenType DIVOP          = TokenType::DIVOP;
+constexpr TokenType ASSIGN         = TokenType::ASSIGN;
+constexpr TokenType EQUALS         = TokenType::EQUALS;
+constexpr TokenType NE             = TokenType::NE;
+constexpr TokenType LTEQ           = TokenType::LTEQ;
+constexpr TokenType GTEQ           = TokenType::GTEQ;
+constexpr TokenType LT             = TokenType::LT;
+constexpr TokenType GT             = TokenType::GT;
+constexpr TokenType PLUSEQUAL      = TokenType::PLUSEQUAL;
+constexpr TokenType MINUSEQUAL     = TokenType::MINUSEQUAL;
+constexpr TokenType MULTEQUAL      = TokenType::MULTEQUAL;
+constexpr TokenType DIVEQUAL       = TokenType::DIVEQUAL;
+constexpr TokenType CARAT          = TokenType::CARAT;
+constexpr TokenType SEMICOLOR      = TokenType::SEMICOLOR;
+constexpr TokenType COMMA          = TokenType::COMMA;
+constexpr TokenType LPAREN         = TokenType::LPAREN;
+constexpr TokenType RPAREN         = TokenType::RPAREN;
+constexpr TokenType LBRACKET       = TokenType::LBRACKET;
+constexpr TokenType RBRACKET       = TokenType::RBRACKET;
+constexpr TokenType LBRACE         = TokenType::LBRACE;
+constexpr TokenType RBRACE         = TokenType::RBRACE;
+constexpr TokenType LCOMMENT       = TokenType::LCOMMENT;
+constexpr TokenType RCOMMENT       = TokenType::RCOMMENT;
+constexpr TokenType END_OF_FILE    = TokenType::END_OF_FILE;
+constexpr TokenType ERROR          = TokenType::ERROR; 
+
+class Token
+{
+private:
+     
+    static map<string, TokenType> reservedWords;
+
+public:
+     
+    static void initialize();
+
+    TokenType type; 
+    string text;   
+    int lineNumber;  
+    Object value;   
+
+     
+    Token(char firstChar) : type(ERROR), lineNumber(0), text("")
+    {
+        text += firstChar;
+    }
+
+     
+    Token *Word(char firstChar, Source *source)
+    {
+        Token *token = new Token(firstChar);
+        token->text = source->text();
+
+        Token wordvalue[] = token.numvalue();
+        for(int i = firstIndex; i <= lastIndex; i++)
+        {
+            token.add(wordvalue[i].text().toupper());
+        }
+
+        return token;
+    }
+
+     
+    Token *Number(char firstChar, Source *source)
+    {
+        Token *token = new Token(firstChar);
+        token->text = source->text();
+
+        Token numvalue[] = token.numvalue();
+        for(int i = firstIndex; i <= lastIndex; i++)
+        {
+            token.add(numvalue[i].text().toupper())
+        }
+
+        return token;
+    }
+
+     
+    Token *CharacterOrString(char firstChar, Source *source)
+    {
+        Token *token = new Token(firstChar);
+        token->text = source->text();
+
+        Token strvalue[] = token.strvalue();
+        for(int i = firstIndex; i <= lastIndex; i++)
+        {
+            token.add(strvalue[i].text().toupper())
+        }
+
+        return token;
+    }
+
+     
+    Token *SpecialSymbol(char firstChar, Source *source)
+    {
+        Token *token = new Token(firstChar);
+        token->text = source->text();
+
+        Token specialvalue[] = token.specialvalue();
+        for(int i = firstIndex; i <= lastIndex; i++)
+        {
+            token.add(specialvalue[i].text().toupper())
+        }
+        return token;
+    }
+};
+
+# 5 "C:\\Users\\shiva\\Desktop\\152scanner\\152scanner\\scanner.h" 2
+
+
+ 
+
+using namespace std;
+
+class Scanner
+{
+private:
+    Source *source;
+
+public:
+     
+    Scanner(Source *source) : source(source){}
+    
+     
+    Token *nextToken()
+    {
+         
+        char ch = nextNonblankCharacter();
+
+        if (isalpha(ch))      return Token::Word(ch, source);
+        else if (isdigit(ch)) return Token::Number(ch, source);
+        else if (ch == '\'')  return Token::CharacterOrString(ch, source);
+        else                  return Token::SpecialSymbol(ch, source);
+    }
+    
+
+private:
+     
+
+    char nextNonblankCharacter()
+    {
+        char ch = source->currentChar();
+
+        while ((ch == '{') || isspace(ch))
+        {
+            if (ch == '{')
+            {
+                 
+                while ((ch != '}') && (ch != EOF)) ch = source->nextChar();
+            }
+             
+            ch = source->nextChar();  
+        }
+         
+        return ch;  
+    }
+};
+
+ 
+
+
+# 6 "C:\\Users\\shiva\\Desktop\\152scanner\\152scanner\\simple.cpp" 2
+
+# 1 "C:\\Users\\shiva\\Desktop\\152scanner\\152scanner\\parser.h" 1
+
+
+
+
+
+
+
+# 1 "C:\\Users\\shiva\\Desktop\\152scanner\\152scanner\\symtab.h" 1
+
+
+
+
+
+
+# 1 "C:\\Users\\shiva\\Desktop\\152scanner\\152scanner\\symtabEntry.h" 1
+
+
+
+
+
+using namespace std;
+
+class SymtabEntry
+{
+private:
+    string name;
+    double value;
+
+public:
+     
+
+
+
+    SymtabEntry(string name) : name(name), value(0.0) {}
+
+     
+
+
+
+    string getName()  const { return name;  }
+
+     
+
+
+
+    double getValue() const { return value; }
+
+     
+
+
+
+    void setValue(const double value) { this->value = value; }
+};
+
+# 7 "C:\\Users\\shiva\\Desktop\\152scanner\\152scanner\\symtab.h" 2
+
+
+using namespace std;
+
+class Symtab
+{
+private:
+    map<string, SymtabEntry *> contents;
+
+public:
+     
+
+
+
+    SymtabEntry *enter(string name)
+    {
+        SymtabEntry *entry = new SymtabEntry(name);
+        contents[name] = entry;
+
+        return entry;
+    }
+
+     
+
+
+
+
+    SymtabEntry *lookup(string name)
+    {
+        return contents.find(name) != contents.end() ? contents[name]
+                                                     : nullptr;
+    }
+};
+
+
+# 8 "C:\\Users\\shiva\\Desktop\\152scanner\\152scanner\\parser.h" 2
+
+# 1 "C:\\Users\\shiva\\Desktop\\152scanner\\152scanner\\node.h" 1
+
+
+
+
+
+
+# 1 "C:\\Users\\shiva\\Desktop\\152scanner\\152scanner\\object.h" 1
+
+
+
+
+
+
+using namespace std;
+
+class Object
+{
+public:
+    long   L;
+    double D;
+    string S;
+    bool   B;
+
+    Object()             : L(0),     D(0.0),   S(""),    B(false) {}
+    Object(long value)   : L(value), D(0.0),   S(""),    B(false) {}
+    Object(double value) : L(0),     D(value), S(""),    B(false) {}
+    Object(string value) : L(0),     D(0.0),   S(value), B(false) {}
+    Object(bool value)   : L(0),     D(0.0),   S(""),    B(value) {}
+};
+
+ 
+
+
+
+
+inline string toUpperCase(string str)
+{
+    string upper_case(str);
+    transform(upper_case.begin(), upper_case.end(),
+              upper_case.begin(), ::toupper);
+    return upper_case;
+}
+
+ 
+
+
+
+
+inline string toLowerCase(string str)
+{
+    string lower_case(str);
+    transform(lower_case.begin(), lower_case.end(),
+              lower_case.begin(), ::tolower);
+    return lower_case;
+}
+
+
+# 7 "C:\\Users\\shiva\\Desktop\\152scanner\\152scanner\\node.h" 2
+
+
+
+using namespace std;
+
+enum class NodeType
+{
+    PROGRAM, COMPOUND, ASSIGN, LOOP, TEST, WRITE, WRITELN,
+    ADD, SUBTRACT, MULTIPLY, DIVIDE, EQ, LT,
+    VARIABLE, INTEGER_CONSTANT, REAL_CONSTANT, STRING_CONSTANT
+};
+
+static const string NODE_TYPE_STRINGS[] =
+{
+    "PROGRAM", "COMPOUND", "ASSIGN", "LOOP", "TEST", "WRITE", "WRITELN",
+    "ADD", "SUBTRACT", "MULTIPLY", "DIVIDE", "EQ", "LT",
+    "VARIABLE", "INTEGER_CONSTANT", "REAL_CONSTANT", "STRING_CONSTANT"
+};
+
+constexpr NodeType PROGRAM          = NodeType::PROGRAM;
+constexpr NodeType COMPOUND         = NodeType::COMPOUND;
+constexpr NodeType ASSIGN           = NodeType::ASSIGN;
+constexpr NodeType LOOP             = NodeType::LOOP;
+constexpr NodeType TEST             = NodeType::TEST;
+constexpr NodeType WRITE            = NodeType::WRITE;
+constexpr NodeType WRITELN          = NodeType::WRITELN;
+constexpr NodeType ADD              = NodeType::ADD;
+constexpr NodeType SUBTRACT         = NodeType::SUBTRACT;
+constexpr NodeType MULTIPLY         = NodeType::MULTIPLY;
+constexpr NodeType DIVIDE           = NodeType::DIVIDE;
+constexpr NodeType EQ               = NodeType::EQ;
+constexpr NodeType LT               = NodeType::LT;
+constexpr NodeType VARIABLE         = NodeType::VARIABLE;
+constexpr NodeType INTEGER_CONSTANT = NodeType::INTEGER_CONSTANT;
+constexpr NodeType REAL_CONSTANT    = NodeType::REAL_CONSTANT;
+constexpr NodeType STRING_CONSTANT  = NodeType::STRING_CONSTANT;
+
+class Node
+{
+public:
+    NodeType type;
+    int lineNumber;
+    string text;
+    SymtabEntry *entry;
+    Object value;
+    vector<Node *> children;
+
+     
+
+
+
+    Node(NodeType type)
+        : type(type), lineNumber(0), entry(nullptr) {}
+
+     
+
+
+
+    void adopt(Node *child) { children.push_back(child); }
+};
+
+
+# 9 "C:\\Users\\shiva\\Desktop\\152scanner\\152scanner\\parser.h" 2
+
+
+using namespace std;
+
+class Parser
+{
+private:
+    Scanner *scanner;
+    Symtab *symtab;
+    Token *currentToken;
+    int lineNumber;
+    int errorCount;
+
+    static set<TokenType> statementStarters;           
+    static set<TokenType> statementFollowers;          
+    static set<TokenType> relationalOperators;         
+    static set<TokenType> simpleExpressionOperators;   
+    static set<TokenType> termOperators;               
+
+public:
+     
+
+
+    static void initialize();
+
+    Parser(Scanner *scanner, Symtab *symtab)
+        : scanner(scanner), symtab(symtab), currentToken(nullptr),
+          lineNumber(1), errorCount(0) {}
+
+    int getErrorCount() const { return errorCount; }
+
+    Node *parseProgram();
+
+private:
+    Node *parseStatement();
+    Node *parseAssignmentStatement();
+    Node *parseCompoundStatement();
+    Node *parseRepeatStatement();
+    Node *parseWriteStatement();
+    Node *parseWritelnStatement();
+    Node *parseExpression();
+    Node *parseSimpleExpression();
+    Node *parseTerm();
+    Node *parseFactor();
+    Node *parseVariable();
+    Node *parseIntegerConstant();
+    Node *parseRealConstant();
+    Node *parseStringConstant();
+
+    void parseStatementList(Node *parentNode, TokenType terminalType);
+    void parseWriteArguments(Node *node);
+
+    void syntaxError(string message);
+    void semanticError(string message);
+};
+
+
+# 7 "C:\\Users\\shiva\\Desktop\\152scanner\\152scanner\\simple.cpp" 2
+
+
+# 1 "C:\\Users\\shiva\\Desktop\\152scanner\\152scanner\\parserTreePrinter.h" 1
+
+
+
+
+
+
+
+
+using namespace std;
+
+class ParseTreePrinter
+{
+private:
+    static const string INDENT_SIZE;
+
+    string indentation;   
+    string line;          
+
+public:
+    ParseTreePrinter() : indentation(""), line("") {}
+
+     
+
+
+
+    void print(Node *node);
+
+private:
+     
+
+
+
+    void printChildren(vector<Node *> children);
+
+     
+
+
+    void printLine();
+};
+
+# 9 "C:\\Users\\shiva\\Desktop\\152scanner\\152scanner\\simple.cpp" 2
+
+# 1 "C:\\Users\\shiva\\Desktop\\152scanner\\152scanner\\executor.h" 1
+
+
+
+
+
+
+
+
+
+
+
+using namespace std;
+
+class Executor
+{
+private:
+    int lineNumber;
+
+public:
+     
+
+
+    static void initialize();
+
+    Executor() : lineNumber(0) {}
+
+    Object visit(Node *node);
+
+private:
+    static set<NodeType> singletons;    
+    static set<NodeType> relationals;   
+
+    Object visitProgram(Node *programNode);
+    Object visitStatement(Node *statementNode);
+    Object visitCompound(Node *compoundNode);
+    Object visitAssign(Node *assignNode);
+    Object visitLoop(Node *loopNode);
+    Object visitTest(Node *testNode);
+    Object visitWrite(Node *writeNode);
+    Object visitWriteln(Node *writelnNode);
+    Object visitExpression(Node *expressionNode);
+    Object visitVariable(Node *variableNode);
+    Object visitIntegerConstant(Node *integerConstantNode);
+    Object visitRealConstant(Node *realConstantNode);
+    Object visitStringConstant(Node *stringConstantNode);
+
+    void printValue(vector<Node *> children);
+    void runtimeError(Node *node, string message);
+};
+
+# 10 "C:\\Users\\shiva\\Desktop\\152scanner\\152scanner\\simple.cpp" 2
+
+
+using namespace std;
+
+void testScanner(Source *source);
+void testParser(Scanner *scanner, Symtab *symtab);
+void executeProgram(Parser *parser, Symtab *symtab);
+
+int main (int argc, char *argv[]){
+    if(argc != 3){
+        cout << "Use: simple-{scan, parse, execute} fileName" << endl;
+        exit (-1);
+    }
+
+    Token::initialize();
+    Parser::initialize();
+    Executor::initialize();
+
+    string operation = argv[1];
+    string fileName = argv[2];
+
+    Source *source = new Source(fileName);
+
+    if(operation == "-scan"){
+        testScanner(source);
+    }
+    else if (operation == "-parse")
+    {
+        testParser(new Scanner(source), new Symtab());
+    }
+    else if (operation == "-execute")
+    {
+        Symtab *symtab = new Symtab();
+        executeProgram(new Parser(new Scanner(source), symtab), symtab);
+    }
+    return 0;
+}
+
+ 
+void testScanner(Source *source){
+    cout << "Tokens: " << endl << endl;
+
+    Scanner *scanner = new Scanner(source);          
+
+    for(Token *token = scanner -> nextToken(); 
+        token->type !=END_OF_FILE; 
+        token = scanner->nextToken()){
+        printf("%14s : %s\n", TOKEN_TYPE_STRINGS[(int) token->type].c_str(),
+               token->text.c_str());
+    }
+}
+
+void testParser(Scanner *scanner, Symtab *symtab)
+{
+    Parser *parser = new Parser(scanner, symtab);   
+    Node *programNode = parser->parseProgram();     
+    int errorCount = parser->getErrorCount();
+
+    if (errorCount == 0)
+    {
+        cout << "Parse tree:" << endl << endl;
+
+        ParseTreePrinter *printer = new ParseTreePrinter();
+        printer->print(programNode);
+    }
+    else
+    {
+        cout << endl << "There were " << errorCount << " errors." << endl;
+    }
+}
+
+void executeProgram(Parser *parser, Symtab *symtab)
+{
+    Node *programNode = parser->parseProgram();
+    int errorCount = parser->getErrorCount();
+
+    if (errorCount == 0)
+    {
+        Executor *executor = new Executor();
+        executor->visit(programNode);
+    }
+    else
+    {
+        cout << endl << "There were " << errorCount << " errors." << endl;
+    }
+}

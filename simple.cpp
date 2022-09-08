@@ -59,10 +59,11 @@ void testScanner(Source *source){
     }
 }
 
+//testParser
 void testParser(Scanner *scanner, Symtab *symtab)
 {
-    Parser *parser = new Parser(scanner, symtab);  // create the parser
-    Node *programNode = parser->parseProgram();    // and parse the program
+    Parser *parser = new Parser(scanner, symtab);  
+    Node *programNode = parser->parseProgram();    
     int errorCount = parser->getErrorCount();
 
     if (errorCount == 0)
@@ -78,6 +79,7 @@ void testParser(Scanner *scanner, Symtab *symtab)
     }
 }
 
+//execute
 void executeProgram(Parser *parser, Symtab *symtab)
 {
     Node *programNode = parser->parseProgram();
