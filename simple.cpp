@@ -1,12 +1,9 @@
 #include <string>
-#include <scanner.h>        //REMOVE Comments once files are completed
-#include <token.h>            //REMOVE Comments once files are completed
-//
+#include <scanner.h>        
+#include <token.h>            
 using namespace std;
 
-
 void testScanner(Source *source);
-
 
 int main (int argc, char *argv[]){
     if(argc != 3){
