@@ -1,8 +1,8 @@
 #ifndef SCANNER_H_
 #define SCANNER_H_
 
-#include "source.h"     //REMOVE Comments once files are completed
-#include "token.h"      //REMOVE Comments once files are completed
+#include "source.h"    
+#include "token.h"      
 
 //namespace std; //frontend {            //mentioned in lecture(?)
 
