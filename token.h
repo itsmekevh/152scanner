@@ -3,44 +3,25 @@
 
 #include <string>
 #include <map>
-#include "source.h"  
+#include "Source.h"
 
+namespace frontend {
 using namespace std;
-
 enum class TokenType
 {
-    // reserved words
-    PROGRAM, BEGIN, END, REPEAT, UNTIL, WRITE, WRITELN,
-    DIV, MOD, AND, OR, NOT, CONST, TYPE, VAR, PROCEDURE,
-    FUNCTION, WHILE, DO, FOR, TO, DOWNTO, IF, THEN, ELSE,
-    WHILE, CASE, OF,
-
-    // special symbols
-    INTEGER, REAL, INDENTIFIER, STRING, CHARACTER
-
-    PLUSOP, MINUSOP, MULTOP, DIVOP, ASSIGN,
-    EQUALS, NE, LTEQ, GTEQ, LT, GT, 
-    PLUSEQUAL, MINUSEQUAL, MULTEQUAL, DIVEQUAL,
-    CARAT, SEMICOLOR, COMMA, LPAREN, RPAREN,
-    LBRACKET, RBRACKET, LBRACE, RBRACE, 
-    LCOMMENT, RCOMMENT;
+    PROGRAM, BEGIN, END, REPEAT, UNTIL, WRITE, WRITELN, DIV, MOD, AND, OR, NOT, CONST, TYPE, VAR, PROCEDURE, FUNCTION, 
+    WHILE, DO, FOR, TO, DOWNTO, IF, THEN, ELSE, CASE, OF, PERIOD, COMMA, COLON, COLON_EQUALS, SEMICOLON, PLUS, 
+    MINUS, STAR, SLASH, LPAREN, RPAREN, EQUALS, NOT_EQUALS, LESS_THAN, LESS_EQUALS,GREATER_THAN, GREATER_EQUALS, 
+    DOT_DOT, QUOTE, LBRACKET, RBRACKET, CARAT, IDENTIFIER, INTEGER, REAL, CHARACTER, STRING, END_OF_FILE, ERROR
 };
 
 static const string TOKEN_TYPE_STRINGS[] =
 {
-    "PROGRAM", "BEGIN", "END", "REPEAT", "UNTIL", "WRITE", "WRITELN",
-    "DIV", "MOD", "AND", "OR", "NOT", "CONST", "TYPE", "VAR", "PROCEDURE",
-    "FUNCTION", "WHILE", "DO", "FOR", "TO", "DOWNTO", "IF", "THEN", "ELSE",
-    "WHILE", "CASE", "OF",
-    
-    "INTEGER", "REAL", "INDENTIFIER", "STRING", "CHARACTER"
-
-    "PLUSOP", "MINUSOP", "MULTOP", "DIVOP", "ASSIGN",
-    "EQUALS", "NE", "LTEQ", "GTEQ", "LT", "GT", 
-    "PLUSEQUAL", "MINUSEQUAL", "MULTEQUAL", "DIVEQUAL",
-    "CARAT", "SEMICOLOR", "COMMA", "LPAREN", "RPAREN",
-    "LBRACKET", "RBRACKET", "LBRACE", "RBRACE", 
-    "LCOMMENT", "RCOMMENT";
+    "PROGRAM", "BEGIN", "END", "REPEAT", "UNTIL", "WRITE", "WRITELN", "DIV", "MOD", "AND", "OR", "NOT", "CONST", "TYPE", 
+    "VAR", "PROCEDURE", "FUNCTION", "WHILE", "DO", "FOR", "TO", "DOWNTO", "IF", "THEN", "ELSE", "CASE", "OF", "PERIOD", 
+    "COMMA", "COLON", "COLON_EQUALS", "SEMICOLON", "PLUS", "MINUS", "STAR", "SLASH", "LPAREN", "RPAREN", "EQUALS", "NOT_EQUALS", 
+    "LESS_THAN", "LESS_EQUALS", "GREATER_THAN", "GREATER_EQUALS", "DOT_DOT", "QUOTE", "LBRACKET", "RBRACKET", "CARAT", "IDENTIFIER", 
+    "INTEGER", "REAL", "CHARACTER", "STRING", "END_OF_FILE", "ERROR"
 };
 
 constexpr TokenType PROGRAM        = TokenType::PROGRAM;
@@ -68,121 +49,76 @@ constexpr TokenType DOWNTO         = TokenType::DOWNTO;
 constexpr TokenType IF             = TokenType::IF;
 constexpr TokenType THEN           = TokenType::THEN;
 constexpr TokenType ELSE           = TokenType::ELSE;
-constexpr TokenType WHILE          = TokenType::WHILE;
 constexpr TokenType CASE           = TokenType::CASE;
 constexpr TokenType OF             = TokenType::OF;
-constexpr TokenType INTEGER        = TokenType::INTEGER;
-constexpr TokenType REAL           = TokenType::REAL;
-constexpr TokenType IDENTIFIER     = TokenType::IDENTIFIER;
-constexpr TokenType STRING         = TokenType::STRING;
-constexpr TokenType CHARACTER      = TokenType::CHARACTER;
-constexpr TokenType PLUSOP         = TokenType::PLUSOP;
-constexpr TokenType MINUSOP        = TokenType::MINUSOP;
-constexpr TokenType MULTOP         = TokenType::MULTOP;
-constexpr TokenType DIVOP          = TokenType::DIVOP;
-constexpr TokenType ASSIGN         = TokenType::ASSIGN;
-constexpr TokenType EQUALS         = TokenType::EQUALS;
-constexpr TokenType NE             = TokenType::NE;
-constexpr TokenType LTEQ           = TokenType::LTEQ;
-constexpr TokenType GTEQ           = TokenType::GTEQ;
-constexpr TokenType LT             = TokenType::LT;
-constexpr TokenType GT             = TokenType::GT;
-constexpr TokenType PLUSEQUAL      = TokenType::PLUSEQUAL;
-constexpr TokenType MINUSEQUAL     = TokenType::MINUSEQUAL;
-constexpr TokenType MULTEQUAL      = TokenType::MULTEQUAL;
-constexpr TokenType DIVEQUAL       = TokenType::DIVEQUAL;
-constexpr TokenType CARAT          = TokenType::CARAT;
-constexpr TokenType SEMICOLOR      = TokenType::SEMICOLOR;
+constexpr TokenType PERIOD         = TokenType::PERIOD;
 constexpr TokenType COMMA          = TokenType::COMMA;
+constexpr TokenType COLON          = TokenType::COLON;
+constexpr TokenType COLON_EQUALS   = TokenType::COLON_EQUALS;
+constexpr TokenType SEMICOLON      = TokenType::SEMICOLON;
+constexpr TokenType PLUS           = TokenType::PLUS;
+constexpr TokenType MINUS          = TokenType::MINUS;
+constexpr TokenType STAR           = TokenType::STAR;
+constexpr TokenType SLASH          = TokenType::SLASH;
 constexpr TokenType LPAREN         = TokenType::LPAREN;
 constexpr TokenType RPAREN         = TokenType::RPAREN;
+constexpr TokenType EQUALS         = TokenType::EQUALS;
+constexpr TokenType NOT_EQUALS     = TokenType::NOT_EQUALS;
+constexpr TokenType LESS_THAN      = TokenType::LESS_THAN;
+constexpr TokenType LESS_EQUALS    = TokenType::LESS_EQUALS;
+constexpr TokenType GREATER_THAN   = TokenType::GREATER_THAN;
+constexpr TokenType GREATER_EQUALS = TokenType::GREATER_EQUALS;
+constexpr TokenType DOT_DOT        = TokenType::DOT_DOT;
+constexpr TokenType QUOTE          = TokenType::QUOTE;
 constexpr TokenType LBRACKET       = TokenType::LBRACKET;
 constexpr TokenType RBRACKET       = TokenType::RBRACKET;
-constexpr TokenType LBRACE         = TokenType::LBRACE;
-constexpr TokenType RBRACE         = TokenType::RBRACE;
-constexpr TokenType LCOMMENT       = TokenType::LCOMMENT;
-constexpr TokenType RCOMMENT       = TokenType::RCOMMENT;
+constexpr TokenType CARAT          = TokenType::CARAT;
+constexpr TokenType IDENTIFIER     = TokenType::IDENTIFIER;
+constexpr TokenType INTEGER        = TokenType::INTEGER;
+constexpr TokenType REAL           = TokenType::REAL;
+constexpr TokenType CHARACTER      = TokenType::CHARACTER;
+constexpr TokenType STRING         = TokenType::STRING;
 constexpr TokenType END_OF_FILE    = TokenType::END_OF_FILE;
-constexpr TokenType ERROR          = TokenType::ERROR; 
+constexpr TokenType ERROR          = TokenType::ERROR;
 
 class Token
 {
 private:
-    //table initialization
     static map<string, TokenType> reservedWords;
-
 public:
-    //staticmap
+
+     //Static map.
     static void initialize();
-
-    TokenType type; 
-    string text;   
-    int lineNumber;  
-    Object value;   
-
-    //token first char
+    
+    TokenType type;  // Type of token
+    int lineNumber;  // Line number of token
+    string text;     // Text of token
+    Object value;    // Value of token
+    
     Token(char firstChar) : type(ERROR), lineNumber(0), text("")
     {
         text += firstChar;
     }
 
-    //word token constructor
-    Token *Word(char firstChar, Source *source)
-    {
-        Token *token = new Token(firstChar);
-        token->text = source->text();
+    //Constructor for word token.
+    static Token *Word(char firstChar, Source *source);
 
-        Token wordvalue[] = token.numvalue();
-        for(int i = firstIndex; i <= lastIndex; i++)
-        {
-            token.add(wordvalue[i].text().toupper());
-        }
+    //Constructor for number token and set its value.
 
-        return token;
-    }
+    static Token *Number(char firstChar, Source *source);
 
-    //num. token constructor and value
-    Token *Number(char firstChar, Source *source)
-    {
-        Token *token = new Token(firstChar);
-        token->text = source->text();
 
-        Token numvalue[] = token.numvalue();
-        for(int i = firstIndex; i <= lastIndex; i++)
-        {
-            token.add(numvalue[i].text().toupper())
-        }
+    //Constructor for string token and set its value.
 
-        return token;
-    }
+    static Token *CharacterOrString(char firstChar, Source *source);
 
-    // string token constructor and value
-    Token *CharacterOrString(char firstChar, Source *source)
-    {
-        Token *token = new Token(firstChar);
-        token->text = source->text();
 
-        Token strvalue[] = token.strvalue();
-        for(int i = firstIndex; i <= lastIndex; i++)
-        {
-            token.add(strvalue[i].text().toupper())
-        }
+    //Constructor for special symbol token and set its value.
+    static Token *SpecialSymbol(char firstChar, Source *source);
 
-        return token;
-    }
-
-    //spcl symbol token and val
-    Token *SpecialSymbol(char firstChar, Source *source)
-    {
-        Token *token = new Token(firstChar);
-        token->text = source->text();
-
-        Token specialvalue[] = token.specialvalue();
-        for(int i = firstIndex; i <= lastIndex; i++)
-        {
-            token.add(specialvalue[i].text().toupper())
-        }
-        return token;
-    }
+    static void tokenError(Token *token, string message);
 };
+
+}
+
 #endif /* TOKEN_H_ */
